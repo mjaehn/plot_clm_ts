@@ -9,8 +9,8 @@ import sys
 
 # Define the netCDF filename
 varname = 'CLCT'
-datadir = '/scratch/snx3000/mjaehn/CH2025/spice/chain/work/cordex_12km_era5_gpu_20230317/post'
-nc_files = sorted(glob.glob(datadir + '/????_??/' + varname + '_ts.nc'))
+datadir = '/project/d121/mjaehn/cordex_12km_era5_gpu_20230317/post'
+nc_files = sorted(glob.glob(datadir + '/1988_07/' + varname + '_ts.nc'))
 
 # Define the output directory for the plots
 outdir = '/scratch/snx3000/mjaehn/CH2025/plots/' + varname
@@ -49,7 +49,6 @@ for nc_file in nc_files:
 
         # Define the contour levels and labels
         clevs = np.arange(0, 110, 10)
-        clabels = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 
         # Create the initial plot and colorbar
         fig, ax = plt.subplots()
@@ -71,7 +70,7 @@ for nc_file in nc_files:
             clct = np.where(clct == fill_value, np.nan, clct)
 
             # Plot the data on the map
-            cs = proj.contourf(x, y, clct, levels=clevs, cmap='Blues_r', extend='max', labels=clabels)
+            cs = proj.contourf(x, y, clct, levels=clevs, cmap=cmap, extend='max')
             proj.drawcoastlines(linewidth=1)
             proj.drawcountries()
             proj.drawmeridians(np.arange(-90, 90, 20), linewidth=0.5, labels=[False,False,False,True])
@@ -85,7 +84,7 @@ for nc_file in nc_files:
 
             # Save the plot to a file
             fn_plot = f'{outdir}/clct_{time_value.strftime("%Y%m%dT%H%M%S")}.png'
-            plt.savefig(fn_plot, bbox_inches='tight', dpi=160)
+            plt.savefig(fn_plot, bbox_inches='tight', dpi=120)
             print(f'{fn_plot} written!')
 
             # Clear the plot for the next time step
